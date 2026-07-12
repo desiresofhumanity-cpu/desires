@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>XXX VIDEOS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 500;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 15px;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo:hover {
+            color: #667eea;
+        }
+
+        .nav-links {
+            display: none;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: none;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-btn-login {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .nav-btn-login:hover {
+            background: white;
+            color: #1e3c72;
+        }
+
+        .nav-btn-signup {
+            background: #667eea;
+            color: white;
+        }
+
+        .nav-btn-signup:hover {
+            background: #764ba2;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px 15px;
+        }
+
+        .content-wrapper {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header-section h1 {
+            color: #333;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .header-section p {
+            color: #666;
+            font-size: 0.95em;
+            margin-bottom: 8px;
+        }
+
+        .header-section .subtitle {
+            color: #999;
+            font-size: 0.85em;
+        }
+
+        /* Videos Grid Layout */
+        .videos-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .video-card {
+            background: #f9f9f9;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .video-card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .video-card-main {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 12px;
+        }
+
+        .video-card-header {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #000;
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 5px;
+        }
+
+        .video-card video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .video-card-play {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+
+        .video-card-header:hover .video-card-play {
+            background: white;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .video-card-header.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .video-card-header.disabled .video-card-play {
+            background: rgba(200, 200, 200, 0.8);
+        }
+
+        .video-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .video-card-title {
+            color: #333;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .play-video-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            transition: all 0.3s;
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .play-video-button:hover:not(:disabled) {
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .play-video-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Advertisement Section Attached to Video */
+        .video-ad-section {
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .video-ad-text {
+            color: white;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .video-ad-button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            transition: all 0.3s;
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .video-ad-button:hover:not(:disabled) {
+            background: #f0f0f0;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-ad-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .ad-status {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 6px;
+        }
+
+        .ad-status.completed {
+            color: #90EE90;
+        }
+
+        /* Countdown Modal */
+        .countdown-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .countdown-modal.show {
+            display: flex;
+        }
+
+        .countdown-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px 20px;
+            max-width: 550px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 15px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .countdown-message {
+            font-size: 22px;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .countdown-timer {
+            font-size: 60px;
+            color: #667eea;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .countdown-text {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .countdown-instruction {
+            font-size: 13px;
+            color: #999;
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #ddd;
+            border-radius: 5px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .stat-box {
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-box-label {
+            color: #999;
+            font-size: 11px;
+            margin-bottom: 6px;
+        }
+
+        .stat-box-value {
+            color: #333;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid #667eea;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .popup-status {
+            font-size: 12px;
+            margin-top: 12px;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        /* Video Player Modal - Mobile Optimized */
+        .video-player-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+        }
+
+        .video-player-modal.show {
+            display: flex;
+        }
+
+        .video-player-content {
+            background: #000;
+            border-radius: 0;
+            max-width: 100%;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            box-shadow: 0 15px 60px rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .video-player-header {
+            position: relative;
+            padding: 15px 20px;
+            background: #1a1a1a;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            height: auto;
+            margin-bottom: 0;
+            z-index: 10;
+        }
+
+        .video-player-header button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 20;
+            font-weight: bold;
+            transition: all 0.3s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .video-player-header button:hover {
+            background: #764ba2;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            background: #000;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 0;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-wrapper video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .video-info-modal {
+            padding: 15px 20px;
+            background: #1a1a1a;
+            z-index: 10;
+        }
+
+        .video-title-modal {
+            color: #fff;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        /* Comments Section */
+        .comments-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #eee;
+        }
+
+        .comments-header {
+            margin-bottom: 20px;
+        }
+
+        .comments-header h2 {
+            color: #333;
+            font-size: 1.5em;
+            margin-bottom: 8px;
+        }
+
+        .comments-count {
+            color: #999;
+            font-size: 0.85em;
+        }
+
+        .comment-form {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #eee;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 6px;
+            font-size: 0.9em;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Arial', sans-serif;
+            font-size: 16px;
+            transition: all 0.3s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .submit-btn:hover {
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .comments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .comment-item {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s;
+        }
+
+        .comment-item:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .comment-author {
+            color: #333;
+            font-weight: bold;
+            font-size: 1em;
+        }
+
+        .comment-date {
+            color: #999;
+            font-size: 0.8em;
+        }
+
+        .comment-text {
+            color: #666;
+            line-height: 1.6;
+            font-size: 0.9em;
+            word-break: break-word;
+        }
+
+        .no-comments {
+            text-align: center;
+            padding: 30px 20px;
+            color: #999;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+
+        .no-comments-icon {
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+
+        /* Laptop/Desktop Responsive */
+        @media (min-width: 769px) {
+            .nav-container {
+                padding: 0 30px;
+            }
+
+            .logo {
+                font-size: 28px;
+                gap: 10px;
+            }
+
+            .nav-links {
+                display: flex;
+                list-style: none;
+                gap: 30px;
+            }
+
+            .nav-links a {
+                color: white;
+                text-decoration: none;
+                font-size: 16px;
+                padding: 15px 0;
+                transition: all 0.3s;
+                position: relative;
+            }
+
+            .nav-links a:hover {
+                color: #667eea;
+            }
+
+            .nav-links a::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 0;
+                height: 2px;
+                background: #667eea;
+                transition: width 0.3s;
+            }
+
+            .nav-links a:hover::after {
+                width: 100%;
+            }
+
+            .nav-buttons {
+                gap: 15px;
+            }
+
+            .nav-btn {
+                padding: 10px 25px;
+                font-size: 14px;
+            }
+
+            .main-content {
+                padding: 50px 30px;
+            }
+
+            .content-wrapper {
+                padding: 50px;
+            }
+
+            .header-section {
+                margin-bottom: 50px;
+            }
+
+            .header-section h1 {
+                font-size: 3em;
+                margin-bottom: 15px;
+            }
+
+            .header-section p {
+                font-size: 1.2em;
+                margin-bottom: 10px;
+            }
+
+            .header-section .subtitle {
+                font-size: 1em;
+            }
+
+            .videos-grid {
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+                gap: 30px;
+                margin-bottom: 50px;
+            }
+
+            .video-card-main {
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .video-card-header {
+                height: 220px;
+                aspect-ratio: auto;
+            }
+
+            .video-card-play {
+                width: 70px;
+                height: 70px;
+                font-size: 35px;
+            }
+
+            .video-info {
+                gap: 10px;
+            }
+
+            .video-card-title {
+                font-size: 1.2em;
+            }
+
+            .video-ad-section {
+                padding: 15px;
+            }
+
+            .video-ad-text {
+                font-size: 0.95em;
+                margin-bottom: 10px;
+            }
+
+            .video-ad-button {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+
+            .ad-status {
+                font-size: 11px;
+                margin-top: 8px;
+            }
+
+            .play-video-button {
+                padding: 12px 20px;
+                font-size: 0.95em;
+            }
+
+            .countdown-content {
+                padding: 50px;
+            }
+
+            .countdown-message {
+                font-size: 28px;
+                margin-bottom: 25px;
+            }
+
+            .countdown-timer {
+                font-size: 80px;
+                margin: 25px 0;
+            }
+
+            .countdown-text {
+                font-size: 18px;
+                margin-bottom: 25px;
+            }
+
+            .countdown-instruction {
+                font-size: 14px;
+                padding: 20px;
+                margin-top: 25px;
+            }
+
+            .progress-bar {
+                margin-top: 20px;
+            }
+
+            .stats-grid {
+                gap: 15px;
+                margin-top: 20px;
+            }
+
+            .stat-box {
+                padding: 15px;
+            }
+
+            .stat-box-label {
+                font-size: 12px;
+                margin-bottom: 8px;
+            }
+
+            .stat-box-value {
+                font-size: 18px;
+            }
+
+            .popup-status {
+                font-size: 14px;
+                margin-top: 15px;
+                padding: 12px;
+                gap: 8px;
+            }
+
+            .comments-section {
+                margin-top: 60px;
+                padding-top: 40px;
+            }
+
+            .comments-header h2 {
+                font-size: 2em;
+                margin-bottom: 10px;
+            }
+
+            .comments-count {
+                font-size: 0.9em;
+            }
+
+            .comment-form {
+                padding: 25px;
+                margin-bottom: 30px;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            .form-group label {
+                margin-bottom: 8px;
+                font-size: 0.95em;
+            }
+
+            .form-group input,
+            .form-group textarea {
+                padding: 12px;
+                font-size: 0.95em;
+            }
+
+            .form-group textarea {
+                min-height: 120px;
+            }
+
+            .submit-btn {
+                padding: 12px 30px;
+                font-size: 0.95em;
+            }
+
+            .comments-list {
+                gap: 20px;
+            }
+
+            .comment-item {
+                padding: 20px;
+            }
+
+            .comment-header {
+                margin-bottom: 12px;
+            }
+
+            .comment-author {
+                font-size: 1.05em;
+            }
+
+            .comment-date {
+                font-size: 0.85em;
+            }
+
+            .comment-text {
+                font-size: 0.95em;
+            }
+
+            .no-comments {
+                padding: 40px 20px;
+            }
+
+            .no-comments-icon {
+                font-size: 2.5em;
+                margin-bottom: 10px;
+            }
+
+            .video-player-modal {
+                padding: 40px 20px;
+            }
+
+            .video-player-content {
+                border-radius: 15px;
+                max-width: 1200px;
+                height: 70vh;
+            }
+
+            .video-wrapper {
+                height: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <span>🎬</span> XXX VIDEOS
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#videos">Videos</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <button class="nav-btn nav-btn-login">Login</button>
+                <button class="nav-btn nav-btn-signup">Sign Up</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="content-wrapper">
+            <!-- Header -->
+            <div class="header-section">
+                <h1>Premium XXX Video Content</h1>
+                <p>Watch advert to support free video</p>
+                <p class="subtitle">Watch the advertisement attached to each video to unlock it</p>
+            </div>
+
+            <!-- Videos Grid -->
+            <h2 style="color: #333; margin-bottom: 20px; font-size: 1.5em; text-align: center;">Highlight Videos</h2>
+            <div class="videos-grid" id="videosGrid">
+                <!-- Videos will be populated here by JavaScript -->
+            </div>
+
+            <!-- Comments Section -->
+            <div class="comments-section">
+                <div class="comments-header">
+                    <h2>💬 Comments</h2>
+                    <p class="comments-count">Share your thoughts about our videos</p>
+                </div>
+
+                <!-- Comment Form -->
+                <div class="comment-form">
+                    <form id="commentForm">
+                        <div class="form-group">
+                            <label for="commentName">Your Name *</label>
+                            <input type="text" id="commentName" name="name" required placeholder="Enter your name">
+                        </div>
+                        <div class="form-group">
+                            <label for="commentText">Your Comment *</label>
+                            <textarea id="commentText" name="text" required placeholder="Share your thoughts..."></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Post Comment</button>
+                    </form>
+                </div>
+
+                <!-- Comments List -->
+                <div id="commentsList" class="comments-list">
+                    <div class="no-comments">
+                        <div class="no-comments-icon">📝</div>
+                        <p>No comments yet. Be the first to share your thoughts!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Countdown Modal -->
+    <div class="countdown-modal" id="countdownModal">
+        <div class="countdown-content">
+            <div class="countdown-message">📺 Advertisement Viewing Time</div>
+            <div class="countdown-timer" id="countdownTimer">15</div>
+            <div class="countdown-text">seconds remaining</div>
+            
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-box-label">Window Status</div>
+                    <div class="stat-box-value" id="windowStatus">🔍 Checking...</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-box-label">Page Load</div>
+                    <div class="stat-box-value" id="pageLoadStatus">⏳ Loading...</div>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <div class="countdown-instruction">
+                ℹ️ Keep the advertisement window open. Closing it before the 15sec countdown ends will prevent video playback.
+            </div>
+            
+            <div class="popup-status" id="popupStatus">
+                <div class="spinner"></div>
+                <span>Monitoring advertisement page...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Player Modal -->
+    <div class="video-player-modal" id="videoPlayerModal">
+        <div class="video-player-content">
+            <div class="video-player-header">
+                <button onclick="closeVideoPlayer()">Close</button>
+            </div>
+            <div class="video-container">
+                <div class="video-wrapper">
+                    <video id="modalVideo" controls controlsList="nodownload" preload="metadata" playsinline webkit-playsinline>
+                        <source src="" type="video/mp4">
+                        Your browser does not support the video tag. Please use a modern browser to watch videos.
+                    </video>
+                </div>
+            </div>
+            <div class="video-info-modal">
+                <div class="video-title-modal" id="modalVideoTitle"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Detect if on mobile device
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // VIDEO DATA - Add or modify videos here
+        const videos = [
+            {
+                id: 'video1',
+                title: 'Big Buck Bunny',
+                url: 'https://www.w3schools.com/html/mov_bbb.mp4',
+                adUrl: 'https://example.com'
+            },
+            {
+                id: 'video2',
+                title: 'Elephant Dream',
+                url: 'https://commondatastorage.googleapis.com/gtv-videos-library/sample/ElephantsDream.mp4',
+                adUrl: 'https://example.com'
+            },
+            {
+                id: 'video3',
+                title: 'For Bigger Blazes',
+                url: 'https://commondatastorage.googleapis.com/gtv-videos-library/sample/ForBiggerBlazes.mp4',
+                adUrl: 'https://example.com'
+            },
+            {
+                id: 'video4',
+                title: 'For Bigger Escapes',
+                url: 'https://commondatastorage.googleapis.com/gtv-videos-library/sample/ForBiggerEscapes.mp4',
+                adUrl: 'https://example.com'
+            },
+            {
+                id: 'video5',
+                title: 'For Bigger Joy',
+                url: 'https://commondatastorage.googleapis.com/gtv-videos-library/sample/ForBiggerJoy.mp4',
+                adUrl: 'https://example.com'
+            },
+            {
+                id: 'video6',
+                title: 'For Bigger Mouthfuls',
+                url: 'https://commondatastorage.googleapis.com/gtv-videos-library/sample/ForBiggerMouthfuls.mp4',
+                adUrl: 'https://example.com'
+            }
+        ];
+
+        const videosGrid = document.getElementById('videosGrid');
+        const countdownModal = document.getElementById('countdownModal');
+        const countdownTimer = document.getElementById('countdownTimer');
+        const popupStatus = document.getElementById('popupStatus');
+        const windowStatus = document.getElementById('windowStatus');
+        const pageLoadStatus = document.getElementById('pageLoadStatus');
+        const progressFill = document.getElementById('progressFill');
+        const videoPlayerModal = document.getElementById('videoPlayerModal');
+        const modalVideo = document.getElementById('modalVideo');
+        const modalVideoTitle = document.getElementById('modalVideoTitle');
+        const commentForm = document.getElementById('commentForm');
+        const commentsList = document.getElementById('commentsList');
+
+        const REQUIRED_TIME = 15;
+        let videoStates = {};
+        let currentAdVideoId = null;
+        let countdownInterval = null;
+        let adWindow = null;
+        let comments = [];
+        const mobile = isMobileDevice();
+
+        // Initialize video states
+        videos.forEach(video => {
+            videoStates[video.id] = {
+                adWatched: false,
+                adWindow: null,
+                adWindowOpen: false,
+                pageLoadDetected: false,
+                elapsedTime: 0,
+                countdownActive: false,
+                adWindowClosed: false
+            };
+        });
+
+        // Load comments from localStorage
+        function loadComments() {
+            const saved = localStorage.getItem('comments');
+            comments = saved ? JSON.parse(saved) : [];
+            renderComments();
+        }
+
+        // Save comments to localStorage
+        function saveComments() {
+            localStorage.setItem('comments', JSON.stringify(comments));
+        }
+
+        // Render comments
+        function renderComments() {
+            if (comments.length === 0) {
+                commentsList.innerHTML = `
+                    <div class="no-comments">
+                        <div class="no-comments-icon">📝</div>
+                        <p>No comments yet. Be the first to share your thoughts!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            commentsList.innerHTML = comments.map((comment, index) => `
+                <div class="comment-item">
+                    <div class="comment-header">
+                        <div class="comment-author">👤 ${escapeHtml(comment.name)}</div>
+                        <div class="comment-date">${formatDate(comment.date)}</div>
+                    </div>
+                    <div class="comment-text">${escapeHtml(comment.text).replace(/\n/g, '<br>')}</div>
+                </div>
+            `).join('');
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diff = now - date;
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+
+            if (minutes < 1) return 'just now';
+            if (minutes < 60) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+            if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+            if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
+
+            return date.toLocaleDateString();
+        }
+
+        // Escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Handle comment form submission
+        commentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('commentName').value.trim();
+            const text = document.getElementById('commentText').value.trim();
+
+            if (name && text) {
+                const comment = {
+                    name,
+                    text,
+                    date: new Date().toISOString()
+                };
+
+                comments.unshift(comment);
+                saveComments();
+                renderComments();
+
+                // Clear form
+                commentForm.reset();
+
+                // Show success message
+                alert('✅ Comment posted successfully!');
+            }
+        });
+
+        // Render video cards
+        function renderVideos() {
+            videosGrid.innerHTML = videos.map(video => `
+                <div class="video-card">
+                    <div class="video-card-main">
+                        <div class="video-card-header disabled" data-video-id="${video.id}">
+                            <video playsinline webkit-playsinline>
+                                <source src="${video.url}" type="video/mp4">
+                            </video>
+                            <div class="video-card-play">▶</div>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-card-title">${video.title}</div>
+                        </div>
+                        <button class="play-video-button" data-video-id="${video.id}" disabled>
+                            Play Video
+                        </button>
+                    </div>
+                    
+                    <!-- Advertisement Section for this Video -->
+                    <div class="video-ad-section">
+                        <div class="video-ad-text">View sponsor ad to unlock this video</div>
+                        <button class="video-ad-button" data-video-id="${video.id}">
+                            View Ad (15 sec)
+                        </button>
+                        <div class="ad-status" id="ad-status-${video.id}">⏳ Pending</div>
+                    </div>
+                </div>
+            `).join('');
+
+            addVideoEventListeners();
+        }
+
+        function addVideoEventListeners() {
+            // Ad button click
+            document.querySelectorAll('.video-ad-button').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const videoId = this.dataset.videoId;
+                    currentAdVideoId = videoId;
+                    const video = videos.find(v => v.id === videoId);
+                    openAdWithFallback(videoId, video.adUrl);
+                });
+            });
+
+            // Video card header click
+            document.querySelectorAll('.video-card-header').forEach(header => {
+                header.addEventListener('click', function() {
+                    const videoId = this.dataset.videoId;
+                    if (!videoStates[videoId].adWatched) {
+                        alert('⚠️ Please watch the advertisement first to unlock this video.');
+                    }
+                });
+            });
+
+            // Play button click
+            document.querySelectorAll('.play-video-button').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const videoId = this.dataset.videoId;
+                    const video = videos.find(v => v.id === videoId);
+                    playVideo(video);
+                });
+            });
+        }
+
+        function openAdWithFallback(videoId, adUrl) {
+            const state = videoStates[videoId];
+            
+            // Open ad window
+            state.adWindow = window.open(adUrl, 'advertisement_' + videoId, 'width=1000,height=700,scrollbars=yes,resizable=yes,menubar=yes,toolbar=yes,location=yes');
+            
+            if (state.adWindow) {
+                state.adWindowOpen = true;
+                windowStatus.textContent = '✓ Window Open';
+                popupStatus.innerHTML = '<div class="spinner"></div><span>Monitoring page load...</span>';
+                
+                // Monitor window closure
+                const windowCheckInterval = setInterval(() => {
+                    if (state.adWindow && state.adWindow.closed && state.countdownActive) {
+                        clearInterval(windowCheckInterval);
+                        state.adWindowClosed = true;
+                        windowStatus.textContent = '✗ Window Closed';
+                        popupStatus.innerHTML = '<span>✗</span><span>Advertisement window was closed</span>';
+                        popupStatus.style.background = '#ffebee';
+                        popupStatus.style.color = '#c62828';
+                        
+                        clearInterval(countdownInterval);
+                        closeCountdownFailed(videoId);
+                    } else if (!state.countdownActive) {
+                        clearInterval(windowCheckInterval);
+                    }
+                }, 500);
+
+                // Auto-detect page load
+                setTimeout(() => {
+                    if (!state.pageLoadDetected) {
+                        state.pageLoadDetected = true;
+                        pageLoadStatus.textContent = '✓ Page Loaded';
+                        popupStatus.innerHTML = '<span>✓</span><span>Advertisement page loaded</span>';
+                        popupStatus.style.background = '#e8f5e9';
+                        popupStatus.style.color = '#388e3c';
+                    }
+                }, 2000);
+            } else {
+                state.adWindowOpen = false;
+                windowStatus.textContent = '✗ Blocked';
+                popupStatus.innerHTML = '<span>✗</span><span>Could not open advertisement (Popup blocker may be active)</span>';
+                popupStatus.style.background = '#ffebee';
+                popupStatus.style.color = '#c62828';
+                
+                // Fallback - try to open URL in new tab
+                const link = document.createElement('a');
+                link.href = adUrl;
+                link.target = '_blank';
+                link.click();
+                state.adWindowOpen = true;
+            }
+
+            countdownModal.classList.add('show');
+            startCountdown(videoId);
+        }
+
+        function startCountdown(videoId) {
+            const state = videoStates[videoId];
+            let seconds = REQUIRED_TIME;
+            state.elapsedTime = 0;
+            state.countdownActive = true;
+            state.adWindowClosed = false;
+
+            countdownInterval = setInterval(function() {
+                if (state.adWindow && state.adWindow.closed) {
+                    clearInterval(countdownInterval);
+                    state.adWindowClosed = true;
+                    closeCountdownFailed(videoId);
+                    return;
+                }
+
+                seconds--;
+                state.elapsedTime++;
+                countdownTimer.textContent = seconds;
+
+                const progress = (state.elapsedTime / REQUIRED_TIME) * 100;
+                progressFill.style.width = progress + '%';
+
+                if (state.adWindow && !state.adWindow.closed) {
+                    windowStatus.textContent = '✓ Window Open';
+                } else if (state.adWindow) {
+                    windowStatus.textContent = '✗ Window Not Open';
+                }
+
+                if (seconds <= 0) {
+                    clearInterval(countdownInterval);
+                    state.countdownActive = false;
+                    completeAdViewing(videoId);
+                }
+            }, 1000);
+        }
+
+        function completeAdViewing(videoId) {
+            const state = videoStates[videoId];
+            
+            if (state.adWindow && state.adWindow.closed) {
+                closeCountdownFailed(videoId);
+                return;
+            }
+
+            state.adWatched = true;
+            countdownModal.classList.remove('show');
+            
+            // Update UI for this specific video
+            const adBtn = document.querySelector(`.video-ad-button[data-video-id="${videoId}"]`);
+            const playBtn = document.querySelector(`.play-video-button[data-video-id="${videoId}"]`);
+            const statusEl = document.getElementById(`ad-status-${videoId}`);
+            
+            if (adBtn) adBtn.disabled = true;
+            if (playBtn) playBtn.disabled = false;
+            if (statusEl) {
+                statusEl.textContent = '✓ Unlocked';
+                statusEl.style.color = '#90EE90';
+            }
+            
+            // Close ad window
+            try {
+                if (state.adWindow && !state.adWindow.closed) {
+                    state.adWindow.close();
+                }
+            } catch (e) {}
+
+            // Auto-play the video after a brief delay
+            setTimeout(() => {
+                const video = videos.find(v => v.id === videoId);
+                playVideo(video);
+            }, 500);
+        }
+
+        function closeCountdownFailed(videoId) {
+            const state = videoStates[videoId];
+            state.countdownActive = false;
+            countdownModal.classList.remove('show');
+            
+            const statusEl = document.getElementById(`ad-status-${videoId}`);
+            if (statusEl) {
+                statusEl.textContent = '✗ Failed - Try Again';
+                statusEl.style.color = '#FF6B6B';
+            }
+            
+            setTimeout(() => {
+                alert('❌ The advertisement window was closed. Please try again.');
+            }, 300);
+        }
+
+        function playVideo(video) {
+            // Update video source
+            const videoSource = modalVideo.querySelector('source');
+            videoSource.src = video.url;
+            videoSource.type = 'video/mp4';
+            
+            // Update title
+            modalVideoTitle.textContent = video.title;
+            
+            // Show modal
+            videoPlayerModal.classList.add('show');
+            
+            // Request fullscreen on mobile
+            if (mobile && document.documentElement.requestFullscreen) {
+                videoPlayerModal.requestFullscreen().catch(err => {
+                    console.log('Fullscreen request failed:', err);
+                });
+            }
+            
+            // Load and play video
+            modalVideo.load();
+            modalVideo.play().catch(err => {
+                console.log('Autoplay prevented:', err);
+            });
+        }
+
+        function closeVideoPlayer() {
+            videoPlayerModal.classList.remove('show');
+            modalVideo.pause();
+            modalVideo.currentTime = 0;
+            const videoSource = modalVideo.querySelector('source');
+            videoSource.src = '';
+            modalVideo.load();
+            
+            // Exit fullscreen if on mobile
+            if (document.fullscreenElement) {
+                document.exitFullscreen().catch(err => {
+                    console.log('Exit fullscreen failed:', err);
+                });
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (countdownModal.classList.contains('show')) {
+                    e.preventDefault();
+                } else if (videoPlayerModal.classList.contains('show')) {
+                    closeVideoPlayer();
+                }
+            }
+        });
+
+        // Handle fullscreen exit on mobile
+        document.addEventListener('fullscreenchange', function() {
+            if (!document.fullscreenElement) {
+                closeVideoPlayer();
+            }
+        });
+
+        // Prevent pinch zoom for better mobile experience
+        document.addEventListener('touchmove', function(e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Initialize
+        renderVideos();
+        loadComments();
+    </script>
+</body>
+</html>
